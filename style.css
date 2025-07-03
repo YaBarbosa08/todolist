@@ -1,0 +1,70 @@
+   body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-image: url(https://64.media.tumblr.com/6843dbcb5827e1ba1b9711a282d2f394/3251e79a89d16a9a-df/s640x960/10e78aeda0433e2446bd7bb7b7e4309e1c39fcfe.gif);
+    }
+
+    h1 {
+      color: #ffffff;
+      transition: all 0.5s ease;
+      width: 25%;
+      margin: 0 auto;
+      padding-bottom: 55px;
+    }
+
+    h1:hover {
+      transform: scale(1.1);
+      cursor: default;
+    }
+
+    input {
+      background-color: transparent;
+      color: #fff;
+      border: none;
+    }
+
+    #taskInput {
+      padding: 10px;
+      width: 200px;
+    }
+
+    #addBtn {
+      padding: 10px 15px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.5s ease;
+    }
+
+    #addBtn:hover {
+      background-color: rgb(255, 0, 234);
+    }
+
+    #taskList {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    #taskList li {
+      background: white;
+      padding: 10px;
+      margin: 5px auto;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .removeBtn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+    }
