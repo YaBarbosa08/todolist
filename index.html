@@ -2,8 +2,150 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minha Lista de Tarefas</title>
-    <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      /* GIF padrão para telas maiores (PC) */
+      background-image: url(https://64.media.tumblr.com/6843dbcb5827e1ba1b9711a282d2f394/3251e79a89d16a9a-df/s640x960/10e78aeda0433e2446bd7bb7b7e4309e1c39fcfe.gif);
+      color: white; /* Adicionado para garantir a cor do texto padrão */
+    }
+
+    h1 {
+      color: #ffffff;
+      transition: all 0.5s ease;
+      width: 25%;
+      margin: 0 auto;
+      padding-bottom: 55px;
+    }
+
+    h1:hover {
+      transform: scale(1.1);
+      cursor: default;
+    }
+
+    input {
+      background-color: transparent;
+      color: #fff;
+      border: none;
+    }
+
+    #taskInput {
+      padding: 10px;
+      width: 200px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 4px;
+    }
+
+    #addBtn {
+      padding: 10px 15px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+
+    #addBtn:hover {
+      background-color: rgb(255, 0, 234);
+    }
+
+    #taskList {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    #taskList li {
+      background: white;
+      padding: 10px;
+      margin: 5px auto;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      word-break: break-word;
+      color: #333; /* Adicionado para garantir a cor do texto nas tarefas */
+    }
+
+    .removeBtn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-left: 10px; /* Adicionado para espaçamento */
+      flex-shrink: 0; /* Previne que o botão encolha */
+    }
+
+    /* --- Estilos Responsivos --- */
+
+    /* Para telas de até 768px (tablets e celulares maiores) */
+    @media screen and (max-width: 768px) {
+      h1 {
+        width: 50%;
+        font-size: 1.8em;
+        padding-bottom: 30px;
+      }
+
+      #taskInput, #addBtn {
+        width: 100%;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+      
+      #addBtn {
+        margin-left: 0;
+      }
+
+      #taskList li {
+        width: 90%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+      }
+
+      .removeBtn {
+        margin-top: 10px;
+        align-self: flex-end;
+      }
+    }
+
+    /* Para telas de até 720px (transição para o GIF menor, ou "tablet") */
+    @media screen and (max-width: 720px) {
+      body {
+        background-image: url(https://i.gifer.com/C5fN.gif); /* GIF menor para telas médias */
+      }
+    }
+
+    /* Para telas de até 480px (celulares) */
+    @media screen and (max-width: 480px) {
+      h1 {
+        width: 80%;
+        font-size: 1.5em;
+      }
+
+      body {
+        padding: 10px;
+        /* O background-image já foi alterado em 720px, mantendo o GIF menor */
+      }
+
+      #taskList li {
+        width: 95%;
+      }
+    }
+
+  </style>
 </head>
 <body>
 
@@ -13,7 +155,72 @@
 
   <ul id="taskList"></ul>
 
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const taskInput = document.getElementById('taskInput');
+      const addBtn = document.getElementById('addBtn');
+      const taskList = document.getElementById('taskList');
 
+      // Load tasks from localStorage when the page loads
+      loadTasks();
+
+      addBtn.addEventListener('click', addTask);
+      taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addTask();
+        }
+      });
+
+      function addTask() {
+        const taskText = taskInput.value.trim();
+        if (taskText !== '') {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+            <span>${taskText}</span>
+            <button class="removeBtn">Remover</button>
+          `;
+          taskList.appendChild(listItem);
+          taskInput.value = ''; // Clear input field
+
+          // Add event listener for the remove button
+          const removeBtn = listItem.querySelector('.removeBtn');
+          removeBtn.addEventListener('click', () => {
+            listItem.remove();
+            saveTasks(); // Save tasks after removal
+          });
+
+          saveTasks(); // Save tasks after adding
+        }
+      }
+
+      function saveTasks() {
+        const tasks = [];
+        taskList.querySelectorAll('li span').forEach(span => {
+          tasks.push(span.textContent);
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      }
+
+      function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks'));
+        if (tasks) {
+          tasks.forEach(taskText => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <span>${taskText}</span>
+              <button class="removeBtn">Remover</button>
+            `;
+            taskList.appendChild(listItem);
+
+            const removeBtn = listItem.querySelector('.removeBtn');
+            removeBtn.addEventListener('click', () => {
+              listItem.remove();
+              saveTasks();
+            });
+          });
+        }
+      }
+    });
+  </script>
 </body>
 </html>
